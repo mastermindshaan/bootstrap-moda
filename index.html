@@ -24,7 +24,8 @@
     <h1>test</h1>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary openBtn" data-toggle="modal">
+    <button type="button" class="btn btn-primary openBtn" data-toggle="modal"
+        data-src="http://localhost:3000/test_koru.html">
         Launch demo modal
     </button>
 
@@ -69,12 +70,14 @@
                 e.stopImmediatePropagation();
                 e.preventDefault();
                 var modalHTML = $('.modal-body').html();
+                var url = $(this).data('src');
+                console.log("url", url);
                 $('#exampleModal').modal({ show: true, backdrop: 'static' });
                 //$(".openBtn").prop('disabled', true);
                 $('#exampleModal').on('shown.bs.modal', function () {
 
                     $(".openBtn").prop('disabled', false);
-                    $('.modal-body').load('http://localhost:3000/test_koru.html', function () {
+                    $('.modal-body').load(url, function () {
                         for (var e = document.body.getElementsByClassName("koru-viewport"), r = 0; r < e.length; r++) { var i = e[r], n = i.getAttribute("data-scene"); if (null === n) koruCreate(i); else { var o = new Koru.Viewport; o.init(i, n) } }
                     });
 
