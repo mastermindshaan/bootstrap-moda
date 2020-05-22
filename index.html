@@ -22,11 +22,20 @@
 
 <body>
     <h1>test</h1>
-
+    <!-- <model-viewer src="https://staging.instmaier.com/clientfiles/1011010_4014456999999_K1_Chrom.glb"
+        alt="A 3D model of an astronaut" auto-rotate camera-controls>
+    </model-viewer> -->
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary openBtn" data-toggle="modal"
-        data-src="http://localhost:3000/test_koru.html">
-        Launch demo modal
+        data-target="http://localhost:3000/test_koru.html">
+        Launch HTML Modal
+    </button>
+
+
+
+    <button type="button" class="btn btn-primary openBtn" data-toggle="modal"
+        data-target="https://staging.instmaier.com/clientfiles/1011010_4014456999999_K1_Chrom.glb" data-type="glb">
+        Launch GLB Modal
     </button>
 
     <!-- Modal -->
@@ -63,35 +72,43 @@
 
 
         <script>
+            var url, type;
             $(".openBtn").on('click', function () {
                 $(this).prop("disabled", true);
             });
             $(".openBtn").on('click', $.debounce(2000, function (e) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
-                var modalHTML = $('.modal-body').html();
-                var url = $(this).data('src');
-                console.log("url", url);
+                url = $(this).data('target');
+                type = $(this).data('type');
+                //$('#exampleModal').modal('dispose');
                 $('#exampleModal').modal({ show: true, backdrop: 'static' });
-                //$(".openBtn").prop('disabled', true);
-                $('#exampleModal').on('shown.bs.modal', function () {
+            }));
 
-                    $(".openBtn").prop('disabled', false);
+
+            $('#exampleModal').on('shown.bs.modal', function () {
+                $(".openBtn").prop('disabled', false);
+                if (type === 'glb') {
+                    $('.modal-body').html(`<model-viewer src="${url}"
+                alt="A 3D model of an astronaut" auto-rotate camera-controls>
+            </model-viewer>`);
+                } else {
                     $('.modal-body').load(url, function () {
                         for (var e = document.body.getElementsByClassName("koru-viewport"), r = 0; r < e.length; r++) { var i = e[r], n = i.getAttribute("data-scene"); if (null === n) koruCreate(i); else { var o = new Koru.Viewport; o.init(i, n) } }
                     });
-
-                });
-
-            }));
-
-            $('#exampleModal').on('hidden.bs.modal', function () {
-                $('.modal-body').html('');
-
+                }
             });
 
+            $('#exampleModal').on('hidden.bs.modal', function () {
+                $('.modal-body').empty();
+            });
 
         </script>
+        <!-- Import the component -->
+        <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+        <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+        <!-- Use it like any other HTML element -->
+
 
 </body>
 
